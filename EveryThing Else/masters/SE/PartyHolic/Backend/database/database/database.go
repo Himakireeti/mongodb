@@ -27,7 +27,7 @@ func Database_setup() {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	checkErr(err, "Database Created")
 
-	db.Debug().AutoMigrate(&models.Addresses{}, &models.Users{}, &models.Parties{}, &models.CancelledParties{})
+	db.AutoMigrate(&models.Addresses{}, &models.Users{}, &models.Parties{}, &models.CancelledParties{}, &models.AttendeeList{})
 	DB = db
 
 }

@@ -119,3 +119,8 @@ type FullPartyDetails struct {
 	Image_id       string `json:"image_id"`
 	Attendee_count int    `json:"interested_people"`
 }
+
+type AttendeeList struct {
+	User_id  int `json:"user_id"`
+	Party_id int `json:"party_id"`
+}

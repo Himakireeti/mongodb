@@ -148,6 +148,37 @@ func CancelParty(c *gin.Context) {
 
 }
 
+func AttendParty(c *gin.Context) {
+	var attendee models.AttendeeList
+	c.BindJSON(&attendee)
+	database.DB.Create(&attendee)
+
+	var count int
+
+	sql_connection, _ := sql.Open("mysql", "root:@tcp(0.0.0.0:3306)/partyholic")
+	sql_connection.QueryRow("select count(party_id) from attendee_lists where party_id=?", attendee.Party_id).Scan(&count)
+	fmt.Println(count)
+	sql_connection.Query("update parties set attendee_count = ? where party_id =?", count+1, attendee.Party_id)
+	defer sql_connection.Close()
+
+}
+
+func CancelAttendance(c *gin.Context) {
+	var attendee models.AttendeeList
+	c.BindJSON(&attendee)
+
+	database.DB.Where("user_id = ? and party_id = ?", attendee.User_id, attendee.Party_id).Delete(models.AttendeeList{})
+
+	var count int
+	sql_connection, _ := sql.Open("mysql", "root:@tcp(0.0.0.0:3306)/partyholic")
+	sql_connection.QueryRow("select count(party_id) from attendee_lists where party_id=?", attendee.Party_id).Scan(&count)
+	fmt.Println(count)
+	sql_connection.Query("update parties set attendee_count = ? where party_id =?", count, attendee.Party_id)
+	defer sql_connection.Close()
+	c.JSON(http.StatusOK, gin.H{"data": attendee})
+
+}
+
 // func options(c *gin.Context) {
 // 	c.JSON(http.StatusOK, gin.H{"message": "options Called"})
 // }

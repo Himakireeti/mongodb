@@ -28,8 +28,10 @@ func main() {
 
 	r.POST("/api/newParty", controllers.AddParty)
 	r.POST("/api/parties", controllers.GetParties)
-	r.POST("/api/getParty/:party_id", controllers.GetParty)
-	r.POST("/api/cancelParty/:party_id", controllers.CancelParty)
+	r.GET("/api/getParty/:party_id", controllers.GetParty)
+	r.GET("/api/cancelParty/:party_id", controllers.CancelParty)
+	r.POST("/api/attendParty", controllers.AttendParty)
+	r.POST("/api/cancelAttendance", controllers.CancelAttendance)
 
 	// PORT environment variable was defined.
 	r.Run()
